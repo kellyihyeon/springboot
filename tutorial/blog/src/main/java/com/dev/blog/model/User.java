@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+//@DynamicInsert
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,8 +31,9 @@ public class User {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @ColumnDefault("'user'")    // 문자라는 걸 알려주기 위해 ''
-    private String role;    // Enum을 쓰는 게 좋다. admin, user, manager -> 실수로 maneger 라고 오타로 넣을 수 있기 때문. Enum 은 도메인으로 넣을 수 있다.
+//    @ColumnDefault("'user'")
+    @Enumerated(EnumType.STRING)
+    private RoleType role;    // Enum을 쓰는 게 좋다. admin, user, manager -> 실수로 maneger 라고 오타로 넣을 수 있기 때문. Enum 은 도메인으로 넣을 수 있다.
 
     @CreationTimestamp      // 현재 시간이 자동으로 입력. 테이블에 insert 될 때
     private Timestamp createDate;
