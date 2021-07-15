@@ -4,6 +4,7 @@ import com.dev.blog.model.RoleType;
 import com.dev.blog.model.User;
 import com.dev.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,8 +21,21 @@ public class DummyControllerTest {
     @Autowired
     private UserRepository userRepository;
 
+
+    @DeleteMapping("/dummy/user/{id}")
+    public String delete(@PathVariable int id) {
+
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {    // 해당 exception 잡기
+            return "삭제에 실패하였습니다. 해당 id는 DB에 존재하지 않습니다.";
+        }
+
+        return "삭제 되었습니다. id = " + id;
+    }
+
+
     // email, password
-    // json 데이터를 요청 -> 스프링이 Java Object 로 변환해서 받아준다. (MessageConvert 의 Jackson 라이브러리가 변환해서 받아준다.) 이때 필요한 어노테이션이 @RequestBody
     @Transactional
     @PutMapping("/dummy/user/{id}")
     public User updateUser(@PathVariable int id, @RequestBody User requestUser) {
@@ -36,7 +50,7 @@ public class DummyControllerTest {
         user.setEmail(requestUser.getEmail());
 
 //        userRepository.save(user);
-        return null;
+        return user;
     }
 
     // http://localhost:8000/blog/dummy/user/
