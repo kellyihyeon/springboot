@@ -13,5 +13,5 @@ public class GlobalExceptionHandler {
     public String handleArgumentException(IllegalArgumentException e) {
         return "<h1>" + e.getMessage() + "</h1>";
     }
-    
+
 }
